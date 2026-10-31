@@ -22,7 +22,7 @@ The project will use **four-parameter logistic (4PL) nonlinear regression**, bec
 **Course clarification needed:** The assignment explicitly lists linear, multiple linear, Poisson, and binomial regression. We need to confirm whether 4PL is accepted or whether an additional course-listed model is required.
 
 ## 7. What data will you simulate? How large will the dataset be, what do rows and columns represent, and how will you choose the parameters?
-All measurements will be synthetic, covering **20 established** (old) and **4 new** reference materials.
+All measurements will be synthetic, covering **3 established** (old) and **20 new** reference materials.
 
 Each observation will contain a reference-material identifier, the drug concentration **X** and potency-related response **Y** (generally absorbance or luminescence). The planned dataset size is approximately **10 concentration-response observations per material** (about **230–240 observations**), subject to implementation.
 

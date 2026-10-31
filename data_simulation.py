@@ -1,24 +1,23 @@
 import numpy as np
-import matplotlib.pyplot as ppl
 
 class RandomResponseCurves():
-#Create a Sigmoid Curve
 
-    def std_sigmoid(x):
+    #Create a Sigmoid Curve
+
+    def std_sigmoid(self, x):
         
         y = 1 / (1 + np.e ** -x)
         return y
 
     #Create random points around 0 (Ornstein-Uhlenbeck Method)
 
-    def random_mean_reverting(start, steps, sigma,
+    def random_mean_reverting(self, start, steps, sigma,
                             theta = 2, mu = 0):
 
         tau = 1/theta
         dt = 0.01 * tau
         y = start
 
-        time = np.arange(steps + 1)
         values = [y]
 
         for i in range (1, steps + 1):
@@ -33,26 +32,23 @@ class RandomResponseCurves():
 
             values.append(x_next)
 
-        return time, values
+    #Generate Human-like Potency Scatter
 
-#Generate Human-like Potency Scatter
+    def generate_simulation(self, n):
 
-n_simulations = 20
-x_list = np.linspace(-15, 15, 10)
+        n_simulations = n
+        x_list = np.linspace(-15, 15, 10)
+        simulated_data = np.array([x_list, y_list_err])
 
-for i in range(1, n_simulations):
+        for i in range(n_simulations):
 
-    data_list = np.array([])
-    error_points = list(random_mean_reverting(0, 1000, 1))
-    y_error = error_points[::100]
-    y_list_err = np.array([std_sigmoid(x_list) + y_error]).append(data_list)
-    i += 1
+            error_points = list(self.random_mean_reverting(0, 1000, 1))
+            y_error = error_points[::100]
+            y_list_err = np.array([self.std_sigmoid(x_list) + y_error]).append(simulated_data)
+            i += 1
+
+        return simulated_data
 
 
 
-# ppl.plot(x_list, y_list_err, "o", color = "green", label = "Error Function")
-# ppl.legend()
-# ppl.ylabel("Reponce")
-# ppl.xlabel("Drug Dosis")
-# ppl.grid()
-# ppl.show()
+
