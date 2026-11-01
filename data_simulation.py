@@ -16,9 +16,8 @@ class RandomResponseCurves():
 
         tau = 1/theta
         dt = 0.01 * tau
-        y = start
 
-        values = [y]
+        values = [start]
 
         for i in range (1, steps + 1):
             x_curr = values[i -1]
@@ -32,22 +31,52 @@ class RandomResponseCurves():
 
             values.append(x_next)
 
+        return np.array(values)
+
     #Generate Human-like Potency Scatter
 
     def generate_simulation(self, n):
 
         n_simulations = n
         x_list = np.linspace(-15, 15, 10)
-        simulated_data = np.array([x_list, y_list_err])
+        simulated_data = []
 
         for i in range(n_simulations):
 
-            error_points = list(self.random_mean_reverting(0, 1000, 1))
-            y_error = error_points[::100]
-            y_list_err = np.array([self.std_sigmoid(x_list) + y_error]).append(simulated_data)
-            i += 1
+            error_points = self.random_mean_reverting(0, 1000, 0.15)
 
-        return simulated_data
+            #Take every 100th point
+            y_error = error_points[:1000:100]
+
+            #Inject the error in the sigmoid curve and save
+            y_list_err = self.std_sigmoid(x_list) + y_error
+            simulated_data.append([x_list, y_list_err])
+
+        return np.array(simulated_data)
+
+if __name__ == "__main__":
+
+    import matplotlib.pyplot as plt
+
+    simulation = RandomResponseCurves()
+    data = simulation.generate_simulation(5)
+
+    print("Array-Form: ", data.shape)
+
+    for i, curve in enumerate(data):
+        x = curve[0]
+        y = curve[1]
+
+        plt.plot(x,y, "o", label = f"Simulation {i + 1}")
+
+    plt.xlabel("Drug Dosis")
+    plt.ylabel("Reponse")
+    plt.title("Simualted Bioassay Potency Curves")
+    plt.legend()
+    plt.grid(alpha = 0.3)
+    plt.show()
+
+
 
 
 
