@@ -43,37 +43,45 @@ class RandomResponseCurves():
 
         for i in range(n_simulations):
 
-            error_points = self.random_mean_reverting(0, 1000, 0.15)
+            triplicates = []
 
-            #Take every 100th point
-            y_error = error_points[:1000:100]
+            for j in range(3):
 
-            #Inject the error in the sigmoid curve and save
-            y_list_err = self.std_sigmoid(x_list) + y_error
-            simulated_data.append([x_list, y_list_err])
+                error_points = self.random_mean_reverting(0, 1000, 0.15)
 
-        return np.array(simulated_data)
+                #Take every 100th point
+                y_error = error_points[:1000:100]
+
+                #Inject the error in the sigmoid curve and save
+                y_list_err = self.std_sigmoid(x_list) + y_error
+
+                triplicates.append(y_list_err)
+            
+            simulated_data.append(triplicates)
+
+        return x_list, np.array(simulated_data)
 
 if __name__ == "__main__":
 
     import matplotlib.pyplot as plt
 
     simulation = RandomResponseCurves()
-    data = simulation.generate_simulation(5)
+    x, data = simulation.generate_simulation(1)
 
     print("Array-Form: ", data.shape)
 
-    for i, curve in enumerate(data):
-        x = curve[0]
-        y = curve[1]
+    for i, triplicates in enumerate(data):
+        plt.figure()
 
-        plt.plot(x,y, "o", label = f"Simulation {i + 1}")
+        for j, y in enumerate(triplicates):
+            plt.plot(x, y, "o", label=f"Triplikat {j + 1}")
 
-    plt.xlabel("Drug Dosis")
-    plt.ylabel("Reponse")
-    plt.title("Simualted Bioassay Potency Curves")
-    plt.legend()
-    plt.grid(alpha = 0.3)
+        plt.xlabel("Drug Dosis")
+        plt.ylabel("Antwort")
+        plt.title(f"Simulation {i + 1}")
+        plt.legend()
+        plt.grid(alpha=0.3)
+
     plt.show()
 
 
