@@ -36,10 +36,11 @@ class RandomResponseCurves():
 
     #Generate Human-like Potency Scatter
 
-    def generate_simulation(self, n):
+    def generate_simulation(self, n, points):
 
         n_simulations = n
-        log_dosis = np.linspace(-15, 15, 12)
+        steps = points * 100
+        log_dosis = np.linspace(-15, 15, points)
         x_list = np.exp(log_dosis)
         simulated_data = []
 
@@ -53,10 +54,10 @@ class RandomResponseCurves():
             #This second loop creates the triplicates for each simulation
             for j in range(3):
 
-                error_points = self.random_mean_reverting(0, 1200, 0.08)
+                error_points = self.random_mean_reverting(0, steps, 0.08)
 
                 #Take every 100th point
-                y_error = error_points[:1200:100]
+                y_error = error_points[:steps:100]
 
                 #Inject the error in the sigmoid curve and save
                 y_list_err = self.std_sigmoid(log_dosis) + y_error
@@ -92,8 +93,7 @@ class RandomResponseCurves():
         params, covar = curve_fit(self.four_pl_fit, x_data, y_data,
                                     p0=[a_start, 1.0, c_start, d_start],
                                     bounds=([-np.inf, 0.01, np.min(x), -np.inf],
-                                          [np.inf, 10.0, np.max(x), np.inf]
-                                    ),
+                                          [np.inf, 10.0, np.max(x), np.inf]),
                                     maxfev=20000      
                                   )
         
@@ -105,7 +105,7 @@ if __name__ == "__main__":
     import matplotlib.pyplot as plt
 
     simulation = RandomResponseCurves()
-    x, data = simulation.generate_simulation(6)
+    x, data = simulation.generate_simulation(n=6, points=14)
 
     n_simulations = len(data)
     n_cols = min(3, n_simulations)
