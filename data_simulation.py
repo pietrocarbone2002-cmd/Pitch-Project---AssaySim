@@ -99,7 +99,34 @@ class RandomResponseCurves():
         
         return params, covar
 
+    #Calculate the R^2 Value
+    def calculate_r_square(self, x, triplicates, parameters):
+
+        #All triplicates
+        y_observed = np.asarray(triplicates, dtype=float).ravel()
+
+        #Model Prediction
+        y_fit = self.four_pl_fit(np.asarray(x), *parameters)
+        y_predicted = np.tile(y_fit, len(triplicates))
+
+        #Square of the residuals
+        sq_res = np.sum((y_observed - y_predicted)**2)
+
+        #Summ of all quares
+        sq_tot = np.sum((y_observed - np.mean(y_observed))**2)
+
+        r_square =  1 - sq_res / sq_tot
+
+        return r_square
+
+    #Claculate %CV (coefficient of variance) of the triplicates
+
+    def calculate_cv():
+        pass
+
     
+
+#Test
 
 if __name__ == "__main__":
     import matplotlib.pyplot as plt
@@ -132,6 +159,8 @@ if __name__ == "__main__":
         #Fit the 4PL regression
         try:
             parameters, covariance = simulation.fit_4pl_simulation(x, triplicates)
+            r_squared = simulation.calculate_r_square(x, triplicates, parameters)
+
 
             a, b, c, d = parameters
 
@@ -144,7 +173,8 @@ if __name__ == "__main__":
                 f"A = {a:.3g}\n"
                 f"B = {b:.3g}\n"
                 f"C = {c:.3g}\n"
-                f"D = {d:.3g}"
+                f"D = {d:.3g}\n"
+                f"R^2 = {r_squared:.3g}"
             )
 
             ax.text(0.97, 0.05, parameter_text, transform=ax.transAxes, fontsize=10,
