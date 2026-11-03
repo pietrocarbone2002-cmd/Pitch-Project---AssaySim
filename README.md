@@ -22,11 +22,13 @@ The project will use **four-parameter logistic (4PL) nonlinear regression**, bec
 **Course clarification needed:** The assignment explicitly lists linear, multiple linear, Poisson, and binomial regression. We need to confirm whether 4PL is accepted or whether an additional course-listed model is required.
 
 ## 7. What data will you simulate? How large will the dataset be, what do rows and columns represent, and how will you choose the parameters?
-All measurements will be synthetic, covering **3 established** (old) and **20 new** reference materials.
+The demo for the App will have 20 simulated curves.**3 established** (old) and **20 new** reference materials.
 
-Each observation will contain a reference-material identifier, the drug concentration **X** and potency-related response **Y** (generally absorbance or luminescence). The planned dataset size is approximately **10 concentration-response observations per material** (about **230–240 observations**), subject to implementation.
-
-Responses will start from a theoretical sigmoid curve. To simulate measurement variability, an Ornstein–Uhlenbeck process will generate a stochastic mean-reverting series 1,100 values. Every 100th value will be sampled as a deviation from the theoretical response.
+For each simulation, 3 x 12 drug concentration points will be derived from a base sigmoid curve. To simulate measurement variability, an Ornstein–Uhlenbeck process will generate a stochastic mean-reverting series. Every 100th value will be sampled as a deviation from the theoretical response.
+Each simulation will have the drug concentration (ng/mL) **X** and potency-related response **Y** (generally absorbance or luminescence). A true scale of the Y axis will not be used for the simulation, since no true readings are provided.
 
 ## 8. How will you apply regression to the simulated data, and how does it support your idea?
 A **4PL curve will be fitted to the noisy simulated measurements**, rather than using the original theoretical curve as the result. AssaySym will evaluate the fitted curves through symmetry and ratio analyses and support comparison between established and new reference materials.
+
+## 9. AI Use
+The whole matplolib plotting and logic was made with the help of ChatGPT

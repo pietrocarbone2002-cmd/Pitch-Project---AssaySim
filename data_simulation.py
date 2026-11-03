@@ -118,12 +118,6 @@ class RandomResponseCurves():
         r_square =  1 - sq_res / sq_tot
 
         return r_square
-
-    #Claculate %CV (coefficient of variance) of the triplicates
-
-    def calculate_cv():
-        pass
-
     
 
 #Test
@@ -132,7 +126,7 @@ if __name__ == "__main__":
     import matplotlib.pyplot as plt
 
     simulation = RandomResponseCurves()
-    x, data = simulation.generate_simulation(n=6, points=14)
+    x, data = simulation.generate_simulation(n=1, points=12)
 
     n_simulations = len(data)
     n_cols = min(3, n_simulations)
@@ -151,6 +145,7 @@ if __name__ == "__main__":
 
     for i, triplicates in enumerate(data):
         ax = axes.flat[i]
+  
 
         #Triplicates
         for j, y in enumerate(triplicates):
